@@ -1,0 +1,125 @@
+.quiz-container {
+    background-color: bisque;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 800px;
+    height: 700px;
+    padding-bottom: 50px;
+    border-radius: 50px;
+}
+
+
+/* -----TIMER STYLES------ */
+
+/* body {
+    font-family: sans-serif;
+    display: grid;
+    height: 100vh;
+    place-items: center;
+   }  */
+
+   #timer {
+       z-index: 10;
+   }
+  
+  .base-timer {
+    position: relative;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .base-timer__svg {
+    transform: scaleX(-1);
+  }
+  
+  .base-timer__circle {
+    fill: #fff;
+    stroke: none;
+  }
+  
+  .base-timer__path-elapsed {
+    stroke-width: 9px;
+    stroke: #fff;
+  }
+  
+  .base-timer__path-remaining {
+    stroke-width: 7px;
+    stroke-linecap: round;
+    transform: rotate(90deg);
+    transform-origin: center;
+    transition: 1s linear all;
+    fill-rule: nonzero;
+    stroke: currentColor;
+  }
+  
+  .base-timer__path-remaining.green {
+    color: rgb(127,210,68);
+  }
+  
+  .base-timer__path-remaining.orange {
+    color: #ffc107;
+  }
+  
+  .base-timer__path-remaining.red {
+    color: #dc3545;
+  }
+  
+  .base-timer__label {
+    position: relative;
+    /* width: 300px;
+    height: 300px; */
+    top: -90px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px; 
+  }
+
+
+  /* VIEWS */
+
+  /* WELCOME VIEW */
+  .quiz-welcome-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background-color: blue; */
+  }
+
+
+  /* QUESTIONS QUIZ VIEW */
+  .quiz-screen {
+    display: none; /* toggle here for testing */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .questions-container {
+    background-color: #fff;
+    position: relative;
+    bottom: 55px;
+    z-index: 1;
+    height: 300px;
+    width: 600px;
+    border-radius: 25px;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.quiz-welcome-screen p {
+  font-size: 20px;
+}
+
+.answer-required::placeholder {
+  color: red;
+}
+
+.quiz-results-screen {
+  display: none;
+}
