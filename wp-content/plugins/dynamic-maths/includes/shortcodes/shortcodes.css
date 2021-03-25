@@ -1,3 +1,9 @@
+h1:not(.site-title):before, h2:before {
+  /* background: transparent !important; */
+  display:none !important;
+
+}
+
 .quiz-container {
     background-color: bisque;
     display: flex;
@@ -82,22 +88,26 @@
 
   /* WELCOME VIEW */
   .quiz-welcome-screen {
-    display: flex;
+    display: flex; /* toggle here for testing - flex or none*/
     flex-direction: column;
     justify-content: center;
     align-items: center;
     /* background-color: blue; */
   }
 
+  /* START BUTTON */
+#start-addition-quiz {
+  display: flex; /* toggle here for testing - block or none*/
+}
 
   /* QUESTIONS QUIZ VIEW */
   .quiz-screen {
-    display: none; /* toggle here for testing */
+    display: none; /* toggle here for testing - flex or none*/
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
-
+  
   .questions-container {
     background-color: #fff;
     position: relative;
@@ -121,5 +131,30 @@
 }
 
 .quiz-results-screen {
-  display: none;
+  display: none; /* toggle here for testing - flex or none*/
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Quiz OVERALL results table */
+.quiz-stats table td, .quiz-stats table th {
+border: none;
+text-align: center;
+font-size: 18px;
+padding: 1px 0;
+}
+
+.quiz-stats table {
+  border-collapse: separate;
+  border-spacing: 65px 0 !important;
+}
+
+
+/* QUIZ DETAILED RESULTS screen */
+.detailed-results-container {
+  display: none; /* toggle here for testing - flex or none*/
+  flex-direction: column;
+  align-items: baseline;
 }

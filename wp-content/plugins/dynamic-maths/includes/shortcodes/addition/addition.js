@@ -1,4 +1,5 @@
-//Selectors
+// <Selectors>
+
 //FIRST VIEW
 const startQuizbutton = document.getElementById('start-addition-quiz'); //welcome screen - start button
 const quizWelcomeView = document.querySelector('.quiz-welcome-screen'); //quiz container
@@ -12,16 +13,64 @@ const answerButton = document.getElementById('answer-button'); //answer question
 const userInput = document.getElementById('quiz-answer');
 const answerRequired = document.querySelector('.answer-required');
 
-//RESULTS VIEW
+//OVERALL RESULTS VIEW
+const quizResultsScreen = document.querySelector('.quiz-results-screen')
+const quizResultsMessage = document.getElementById('quiz-results-message'); //message on times up
+const totalQuestionsAnswers = document.getElementById('total-questions-answered'); // Total questions value
+const totalCorrectAnswers = document.getElementById('total-correct-answers'); // Total correct answers
+const totalAccuracy = document.getElementById('total-accuracy'); // Total accuracy
+const restartQuizButton = document.getElementById('restart-quiz-button');
+const seeDetailedResultsButton = document.getElementById('see-results'); //see results button
 
+//DETAILED RESULTS VIEW
+const detailedResultsScreen = document.querySelector('.detailed-results-container');
+const backToResultsButton = document.getElementById('back-to-results');
+const detailedResultsTable = document.getElementById('detailed-results-table');
 
-//INIT
+// </SELECTORS>
+
+//INITIALIZE ---- general functionality
+
 let questions = [];
-let numOfQuestions = 5;
+let numOfQuestions = 12;
 
-const randomNum = () => Math.floor(Math.random() * 15);
+const randomNum = () => Math.floor(Math.random() * questionDifficultyRandomNum );
 
-//Create array object of questions and methods
+
+// Difficulty level - NEED MIN MAX from Alex
+let userAdditionSkillLevel = parseInt(php_data.user_addition_skill);
+let questionDifficultyRandomNum;
+switch(userAdditionSkillLevel){
+  case 1 :
+    questionDifficultyRandomNum = 10;
+    break;
+
+  case 2 :
+    questionDifficultyRandomNum = 40;
+    break;
+    
+    case 3 :
+    questionDifficultyRandomNum = 75;
+    break;
+    
+    case 4 :
+    questionDifficultyRandomNum = 100;
+    break;
+
+    case 5 :
+    questionDifficultyRandomNum = 140;
+    break;
+    
+    case 6 :
+    questionDifficultyRandomNum = 170;
+    break;
+
+    default:
+      questionDifficultyRandomNum = 110;
+      break;
+}
+
+//Create an array of objects with maths questions and methods
 const generateQuestions = (numOfQuestions) => {
     for (let i = 1; i <= numOfQuestions; i++){
     questions[`q${i}`] = {
@@ -51,33 +100,27 @@ const generateQuestions = (numOfQuestions) => {
   }
 
 
-  //Display an individual question 
-  let questionIndex = 1;
+  // QUIZ SCREEN FUNCTIONALITY
 
-  const displayQuestion = () => {
-    quizQuestionsCount.textContent = `Question ${questionIndex} / ${Object.keys(questions).length}`;
-    quizQuestion.textContent = questions[`q${questionIndex.toString()}`].displayQuestion;
-  }
-
-// VIEWS 
-// quizQuestionsCount.textContent = `hi there`;
-// quizQuestion.textContent = `1 + 1`;
-
-//////// Event Listeners ////////
-
-// WELCOME SCREEN - Initialize
-startQuizbutton.addEventListener('click', function(){
-  quizQuestionsView.style.display = 'flex';
+  //Start quiz
+  const startQuizQuestions = () => {
+    userInput.value = '';
+    userInput.placeholder = 'Your answer';
+    userInput.classList.remove('answer-required');
+    questionIndex = 1;
+    quizQuestionsView.style.display = 'flex';
     startTimer();
     generateQuestions(numOfQuestions);
     displayQuestion();
     startQuizbutton.style.display = "none";
+    quizResultsMessage.style.display = "none";
+    quizResultsScreen.style.display = "none";
+    userInput.focus();
+  }
 
-});
-
-// QUIZ SCREEN - submit next button
-answerButton.addEventListener('click', function(){
-  // save user value and push to questions array
+  //Next question
+  const nextQuestion = () => {
+    // save user value and push to questions array
     if(userInput.value === ''){
       userInput.placeholder = '*Required';
       userInput.classList.add('answer-required');
@@ -85,31 +128,157 @@ answerButton.addEventListener('click', function(){
     } else {
       userInput.placeholder = 'Your answer';
       userInput.classList.remove('answer-required');
-
+    
     questions[`q${questionIndex.toString()}`].userAnswer = userInput.value;
     userInput.value = '';
     // if questionIndex is not = questions.length, questionIndex++
     if (questionIndex >= Object.keys(questions).length){
-      onTimesUp();
+      onTimesUp(true); // true means the user finished before the timer
     } else {
       questionIndex++
       displayQuestion();
     }
+    }
+    }
+
+
+  // RESULTS SCREEN FUNCTIONALITY
+const displayQuizResultsMessage = (message) => {
+  // False means the user didn't finish in time
+  if (!message){
+  quizResultsMessage.textContent = `Times up! Good job!`;
+  } else {
+    quizResultsMessage.textContent = 'Finished! Good job!';
   }
-});
+};
+
+// Display results functionality
+const displayResults = () => {
+
+  // Loop through objects and pull out data
+  let correctAnswers = [];
+  let userAnswers = [];
+  for (const result in questions) {
+  if (questions[result].userAnswer !== null){
+  correctAnswers.push(questions[result].correctAnswer);
+  userAnswers.push(parseInt(questions[result].userAnswer));
+  }
+  }
+  // Display total number of questions answered
+  totalQuestionsAnswers.textContent = userAnswers.length.toString();
 
 
-    // alert(php_data.user_addition_skill);
-    // alert(php_data.user_subtraction_skill);
-    // alert(php_data.user_multiplication_skill);
-    // alert(php_data.user_decimals_skill);
-    // alert(php_data.user_fractions_skill);
+  // Check to see if user's answers are correct 
+  let correctAnswersCounter = 0;
+  for (let i=0; i < userAnswers.length; i++){
+    if (userAnswers[i] === correctAnswers[i]){
+      correctAnswersCounter++
+    }
+  }
+ // Display total number of correct answers
+  totalCorrectAnswers.textContent = correctAnswersCounter.toString();
 
 
-// ================================ TIMER =============================
-const FULL_DASH_ARRAY = 283;
-const WARNING_THRESHOLD = 10;
-const ALERT_THRESHOLD = 5;
+  // Calculate accuracy percentage
+  let accuracyPercentage = 0;
+  accuracyPercentage = (correctAnswersCounter / userAnswers.length) * 100;
+  // Display accuracy percentage. If no answers, display 0%.
+  if (!accuracyPercentage){
+    totalAccuracy.textContent = '0%';
+  } else {
+  totalAccuracy.textContent = `${accuracyPercentage.toFixed(0)}%`;
+  }
+}
+
+  // VIEWS 
+  //Display an individual question on screen 
+  let questionIndex = 1;
+
+  const displayQuestion = () => {
+    // quizQuestionsCount.textContent = `Question ${questionIndex} / ${Object.keys(questions).length}`;
+    quizQuestion.textContent = questions[`q${questionIndex.toString()}`].displayQuestion;
+  }
+
+
+  //RESULTS VIEWS
+
+//////// Event Listeners ////////
+
+// WELCOME SCREEN - Initialize
+startQuizbutton.addEventListener('click', startQuizQuestions);
+
+// QUIZ SCREEN - submit next button
+//click mouse
+answerButton.addEventListener('click', nextQuestion);
+//press enter
+window.addEventListener('keyup', function(e){
+if (quizQuestionsView.style.display === 'flex'){
+  if (e.key === 'Enter'){
+  nextQuestion();
+  }
+}}
+);
+
+// OVERALL RESULTS SCREEN
+//restart quiz button
+restartQuizButton.addEventListener('click', startQuizQuestions);
+
+
+
+//See detailed results
+seeDetailedResultsButton.addEventListener('click', function(){
+
+  // startQuizbutton.style.display = "none";
+  quizResultsMessage.style.display = "none";
+  quizResultsScreen.style.display = "none";
+  detailedResultsScreen.style.display = "flex";
+
+  // functionality to display all the results in a table
+  let i = 1;
+  for (const result in questions) {
+  if (questions[result].userAnswer !== null){
+  
+    let newRow = detailedResultsTable.insertRow(i);
+
+    let questionCell = newRow.insertCell(0);
+    let userAnswerCell = newRow.insertCell(1);
+    let correctAnswerCell = newRow.insertCell(2);
+
+    questionCell.innerHTML = questions[result].displayQuestion;
+    userAnswerCell.innerHTML = questions[result].userAnswer;
+    correctAnswerCell.innerHTML = questions[result].correctAnswer;
+    i++
+    }
+  }
+
+}
+)
+
+
+
+
+// DETAILED RESULTS SCREEN - see results quiz button
+backToResultsButton.addEventListener('click', function(){
+  quizResultsMessage.style.display = "flex";
+  quizResultsScreen.style.display = "flex";
+  detailedResultsScreen.style.display = "none";
+
+  detailedResultsTable.innerHTML = 
+  `<tr>
+  <th>Question</th>
+  <th>Your Answer</th>
+  <th>Correct Answer</th>
+</tr>`;
+
+})
+
+
+
+// =================== TIMER FUNCTIONALITY AND DISPLAY =======================
+
+let FULL_DASH_ARRAY = 283;
+let WARNING_THRESHOLD = 10;
+let ALERT_THRESHOLD = 5;
 
 const COLOR_CODES = {
   info: {
@@ -125,12 +294,14 @@ const COLOR_CODES = {
   }
 };
 
-const TIME_LIMIT = 132;
+const TIME_LIMIT = 5; //  <================================= CHANGE TIMER HERE
+
 let timePassed = 0;
 let timeLeft = TIME_LIMIT;
 let timerInterval = null;
 let remainingPathColor = COLOR_CODES.info.color;
 
+const displayTime = () => {
 document.getElementById("timer").innerHTML = `
 <div class="base-timer">
   <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -155,15 +326,26 @@ document.getElementById("timer").innerHTML = `
 </div>
 `;
 
+  }
+
 
 // Timer hits 0
-function onTimesUp() {
+function onTimesUp(message) {
   clearInterval(timerInterval);
-  document.querySelector('.quiz-results-screen').style.display = "block";
-  document.querySelector('.quiz-screen').style.display = "none";
+  quizResultsScreen.style.display = "flex";
+  quizQuestionsView.style.display = "none";
+  displayQuizResultsMessage(message);
+  displayResults();
+
+  //Reset variables
+  timePassed = 0;
+  timeLeft = TIME_LIMIT;
+  timerInterval = null;
+  remainingPathColor = COLOR_CODES.info.color;
 }
 
 function startTimer() {
+  displayTime();
   timerInterval = setInterval(() => {
     timePassed = timePassed += 1;
     timeLeft = TIME_LIMIT - timePassed;

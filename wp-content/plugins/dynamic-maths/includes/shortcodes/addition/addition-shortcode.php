@@ -21,12 +21,12 @@ function addition_quiz() {
             <div id="timer"></div>
          
             <div id="addition-questions" class="questions-container">
-                <p id="question-count"></p>
+                <!-- <p id="question-count"></p> -->
                 <p id="quiz-question"></p>
             </div>
 
             <div class="quiz-input-submit">
-                <input id="quiz-answer" type="number" placeholder="Your answer">
+                <input id="quiz-answer" type="number" placeholder="Your answer" autofocus>
                 <button class='class-button' id="answer-button">Next</button>
             </div>
             <!-- <p class="answer-required">*REQUIRED</p> -->
@@ -34,13 +34,54 @@ function addition_quiz() {
 
 
         <div class="quiz-results-screen">
-            <p>here are the results</p>
-            <div class="result-buttons-container">
-            <button id="see-results">See Results</button>
-            <button id="restart">Again</button>
+            <p id="quiz-results-message">Here are your results</p>
+           <div class="quiz-stats">
+               <table>
+                <tr>
+                    <td id="total-questions-answered">20</td>
+                    <td id="total-correct-answers">10</td>
+                    <td id="total-accuracy">50%</td>
+                </tr>
+                <tr>
+                    <td>Total Questions</td>
+                    <td>Correct Answers</td>
+                    <td>Accuracy</td>
+                </tr>
+                </table>
 
             </div>
+           
+            <div class="result-buttons-container">
+                <button id="see-results">See Results</button>
+                <button id="restart-quiz-button">Restart</button>
+            </div>
+
         </div>
+
+            <div class="detailed-results-container">
+                <!-- question | Your Answer | Correct Answer -->
+                <h2>Results</h2>
+                <table id="detailed-results-table">
+                    <tr>
+                        <th>Question</th>
+                        <th>Your Answer</th>
+                        <th>Correct Answer</th>
+                    </tr>
+
+                    <!-- <tr>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                    </tr> -->
+
+                    
+                </table>
+               
+                <div>
+                    <button id="back-to-results">Back</button>
+                </div>
+
+            </div>
 
 </div>
             
