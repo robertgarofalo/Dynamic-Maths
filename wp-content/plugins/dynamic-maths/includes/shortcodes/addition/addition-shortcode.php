@@ -60,18 +60,33 @@ function addition_quiz() {
 
             <div class="detailed-results-container">
                 <!-- question | Your Answer | Correct Answer -->
-                <h2>Results</h2>
+                <h1>Results</h1>
                 <table id="detailed-results-table">
-                    <tr>
-                        <th>Question</th>
+                    <!-- <tr> -->
+                        <!-- <th>Question</th>
                         <th>Your Answer</th>
-                        <th>Correct Answer</th>
-                    </tr>
+                        <th>Correct Answer</th> -->
+                    <!-- </tr> -->
 
                     <!-- <tr>
+                        <td>5 + 0</td>
+                        <td>5</td>
                         <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>5 + 0</td>
+                        <td>5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>5 + 0</td>
+                        <td>5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>5 + 0</td>
+                        <td>5</td>
+                        <td>5</td>
                     </tr> -->
 
                     

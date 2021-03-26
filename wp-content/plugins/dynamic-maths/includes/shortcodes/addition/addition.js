@@ -1,3 +1,6 @@
+// ROB TO DO
+// - ability to send results or save somewhere
+
 // <Selectors>
 
 //FIRST VIEW
@@ -143,16 +146,86 @@ const generateQuestions = (numOfQuestions) => {
 
 
   // RESULTS SCREEN FUNCTIONALITY
+  
 const displayQuizResultsMessage = (message) => {
-  // False means the user didn't finish in time
-  if (!message){
-  quizResultsMessage.textContent = `Times up! Good job!`;
+
+   // False means the user didn't finish in time
+  if (message === false){
+  quizResultsMessage.textContent = `Times up!`;
+
+  // 'empty' means the user didnt' enter any results
+  } else if (message === 'empty'){
+    quizResultsMessage.textContent = 'No answers submitted!'
   } else {
-    quizResultsMessage.textContent = 'Finished! Good job!';
+    quizResultsMessage.textContent = 'Finished! Great Effort!';
   }
 };
 
-// Display results functionality
+// See detailed quiz results button function
+const seeDetailedQuizResults = () => {
+  quizWelcomeView.style.display = "none"
+
+  let answers = [];
+  for (const result in questions) {
+    answers.push(questions[result].userAnswer);
+  }
+
+  console.log(answers);
+  if (answers.every(answer => answer === null)){
+    displayQuizResultsMessage('empty');
+    return;
+  }
+
+  // startQuizbutton.style.display = "none";
+  quizResultsMessage.style.display = "none";
+  quizResultsScreen.style.display = "none";
+  detailedResultsScreen.style.display = "flex";
+
+  
+  detailedResultsTable.innerHTML = 
+  `<tr>
+  <th>Question</th>
+  <th>Your Answer</th>
+  <th>Correct Answer</th>
+</tr>`;
+
+  // functionality to display all the results in a table
+  let i = 1;
+
+  for (const result in questions) {
+  if (questions[result].userAnswer !== null){
+  
+    let newRow = detailedResultsTable.insertRow(i);
+    
+    let questionCell = newRow.insertCell(0);
+    let userAnswerCell = newRow.insertCell(1);
+    let correctAnswerCell = newRow.insertCell(2);
+
+    
+    questionCell.innerHTML = questions[result].displayQuestion;
+    userAnswerCell.innerHTML = questions[result].userAnswer;
+
+    if (questions[result].userAnswer === questions[result].correctAnswer.toString()){
+      // add green class list
+      newRow.classList.add('quiz-correct-answer');
+      // correctAnswerCell.innerHTML = 'correct brahh';
+      correctAnswerCell.innerHTML = '<span class="dashicons dashicons-yes-alt quiz-correct-answer-tick"></span>';
+    } else {
+      //add red class list
+      newRow.classList.add('quiz-incorrect-answer');
+      correctAnswerCell.innerHTML = questions[result].correctAnswer;
+
+    }
+
+    i++
+    }
+  }
+
+}
+
+
+// DISPLAY DETAILED RESULTS FUNCTIONALITY
+
 const displayResults = () => {
 
   // Loop through objects and pull out data
@@ -190,8 +263,16 @@ const displayResults = () => {
   }
 }
 
+// BACK TO OVERALL RESULTS BUTTON FUNCTIONALITY
+const backToResultsView = () => {
+  quizWelcomeView.style.display = "flex";
+  quizResultsMessage.style.display = "flex";
+  quizResultsScreen.style.display = "flex";
+  detailedResultsScreen.style.display = "none";
+}
+
   // VIEWS 
-  //Display an individual question on screen 
+  //Display maths question on screen 
   let questionIndex = 1;
 
   const displayQuestion = () => {
@@ -223,54 +304,12 @@ if (quizQuestionsView.style.display === 'flex'){
 //restart quiz button
 restartQuizButton.addEventListener('click', startQuizQuestions);
 
+//See detailed results 
+seeDetailedResultsButton.addEventListener('click', seeDetailedQuizResults);
 
 
-//See detailed results
-seeDetailedResultsButton.addEventListener('click', function(){
-
-  // startQuizbutton.style.display = "none";
-  quizResultsMessage.style.display = "none";
-  quizResultsScreen.style.display = "none";
-  detailedResultsScreen.style.display = "flex";
-
-  // functionality to display all the results in a table
-  let i = 1;
-  for (const result in questions) {
-  if (questions[result].userAnswer !== null){
-  
-    let newRow = detailedResultsTable.insertRow(i);
-
-    let questionCell = newRow.insertCell(0);
-    let userAnswerCell = newRow.insertCell(1);
-    let correctAnswerCell = newRow.insertCell(2);
-
-    questionCell.innerHTML = questions[result].displayQuestion;
-    userAnswerCell.innerHTML = questions[result].userAnswer;
-    correctAnswerCell.innerHTML = questions[result].correctAnswer;
-    i++
-    }
-  }
-
-}
-)
-
-
-
-
-// DETAILED RESULTS SCREEN - see results quiz button
-backToResultsButton.addEventListener('click', function(){
-  quizResultsMessage.style.display = "flex";
-  quizResultsScreen.style.display = "flex";
-  detailedResultsScreen.style.display = "none";
-
-  detailedResultsTable.innerHTML = 
-  `<tr>
-  <th>Question</th>
-  <th>Your Answer</th>
-  <th>Correct Answer</th>
-</tr>`;
-
-})
+// Back to RESULTS SCREEN - back button
+backToResultsButton.addEventListener('click', backToResultsView)
 
 
 
@@ -294,7 +333,7 @@ const COLOR_CODES = {
   }
 };
 
-const TIME_LIMIT = 5; //  <================================= CHANGE TIMER HERE
+const TIME_LIMIT = 3; //  <================================= CHANGE TIMER HERE
 
 let timePassed = 0;
 let timeLeft = TIME_LIMIT;
@@ -331,6 +370,7 @@ document.getElementById("timer").innerHTML = `
 
 // Timer hits 0
 function onTimesUp(message) {
+  quizResultsMessage.style.display = 'block';
   clearInterval(timerInterval);
   quizResultsScreen.style.display = "flex";
   quizQuestionsView.style.display = "none";
@@ -356,7 +396,7 @@ function startTimer() {
     setRemainingPathColor(timeLeft);
 
     if (timeLeft === 0) {
-      onTimesUp();
+      onTimesUp(false);
     }
   }, 1000);
 }

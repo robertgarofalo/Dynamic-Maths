@@ -5,7 +5,7 @@ h1:not(.site-title):before, h2:before {
 }
 
 .quiz-container {
-    background-color: bisque;
+    /* background-color: bisque; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -74,8 +74,6 @@ h1:not(.site-title):before, h2:before {
   
   .base-timer__label {
     position: relative;
-    /* width: 300px;
-    height: 300px; */
     top: -90px; 
     display: flex;
     align-items: center;
@@ -156,5 +154,61 @@ padding: 1px 0;
 .detailed-results-container {
   display: none; /* toggle here for testing - flex or none*/
   flex-direction: column;
-  align-items: baseline;
+  align-items: center;
+  justify-content: center;
+}
+
+#detailed-results-table {
+  text-align: center;
+  border-collapse: collapse;
+}
+
+#detailed-results-table tr {
+vertical-align: middle;
+height: 20px !important;
+}
+
+#detailed-results-table tr:nth-child(even) {
+  background: rgb(241, 241, 241);
+}
+
+#detailed-results-table tr:nth-child(odd) {
+background: transparent;
+}
+
+#detailed-results-table th:nth-child(1) {
+  /* height: 1px !important; */
+  border-top-left-radius: 15px;
+}
+
+#detailed-results-table th:nth-child(3) {
+  /* height: 1px !important; */
+  border-top-right-radius: 15px;
+}
+
+#detailed-results-table th, #detailed-results-table td {
+border-collapse: collapse;
+border: none;
+padding: 0 0.2em;
+}
+
+#detailed-results-table th {
+  background: #7fd244;
+  color: #fff;
+}
+
+/* Correct Answers Row*/
+.quiz-correct-answer {
+  color: #7fd244;
+}
+
+.quiz-correct-answer-tick {
+  color: #7fd244;
+  vertical-align: middle;
+  padding: 0;
+}
+
+/* Incorrect Answers Row */
+.quiz-incorrect-answer {
+  color: red;
 }
